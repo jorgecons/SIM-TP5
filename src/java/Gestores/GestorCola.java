@@ -264,7 +264,7 @@ public class GestorCola {
     public Auto liberarCabina() {
         Auto aut = null;
 
-//        if (numeroCabina == -1) {
+       if (numeroCabina == -1) {
 
             cabina.liberar();
 
@@ -273,16 +273,16 @@ public class GestorCola {
                 aut = cabina.siguienteAuto();
 
            }
-//        }else{
-//            Cabina cab=listadoCabinas.get(numeroCabina);
-//            listadoCabinas.get(numeroCabina).liberar();
-//            if(!cab.estaVacio()){
-//                aut= listadoCabinas.get(numeroCabina).siguienteAuto();
-//                if(cab.estaVacio()){
-//                    listadoCabinas.remove(cab);
-//                }
-//            }
-//        }
+        }else{
+            
+            listadoCabinas.get(numeroCabina).liberar();
+            if(listadoCabinas.get(numeroCabina).estaVacio()){
+                aut= listadoCabinas.get(numeroCabina).siguienteAuto();
+                if(listadoCabinas.get(numeroCabina).estaVacio()){
+                    listadoCabinas.remove(listadoCabinas.get(numeroCabina));
+                }
+            }
+        }
 
         return aut;
     }
@@ -320,7 +320,7 @@ public class GestorCola {
             vec.generarTiempoAtencion(auto);
             cabin.ocupar();
 
-            numeroCabina = 0;
+            
             listadoCabinas.add(cabin);
 
         } else {
@@ -343,7 +343,7 @@ public class GestorCola {
                 vec.generarTiempoAtencion(auto);
                 cabin.ocupar();
 
-                numeroCabina = 0;
+                //numeroCabina = listadoCabinas.size();
                 listadoCabinas.add(cabin);
                 return;
             }
