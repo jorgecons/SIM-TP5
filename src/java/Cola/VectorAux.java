@@ -34,7 +34,9 @@ public class VectorAux{
 
     @Override
     public String toString() {
+    //    return "VectorAux{" + "montoTotal=" + montoTotal + ", vec=" + vec + ", cabinas=" + cabinas + ", autos=" + autos + '}';
         return "VectorAux{" + "montoTotal=" + montoTotal + ", vec=" + vec + ", cabinas=" + cabinas + ", autos=" + autos + '}';
+    
     }
 
     public int getMontoTotal() {
