@@ -44,7 +44,7 @@ public class VectorEstado {
         do {
             rndLlegadaAuto = Math.random();
         } while (rndLlegadaAuto == 0d);
-        tiempoEntreLlegada = -180 * Math.log(1 - rndLlegadaAuto);
+        tiempoEntreLlegada = -50 * Math.log(1 - rndLlegadaAuto);
 
         tiempoProximaLlegada = tiempoActual + tiempoEntreLlegada;
         generarCatAuto();
@@ -216,14 +216,14 @@ public class VectorEstado {
     public String toString() {
         return "\n--------------------------------\n"
                 + " Vector Estado A Añadir{"
-                + "\ntiempoActual=" + tiempoActual
-                + ",\n tiempoProximaLlegada=" + tiempoProximaLlegada
-                + ",\n tiempoEntreLlegada=" + tiempoEntreLlegada
-                + ",\n tiempoDemoraAtencion=" + tiempoFinAtencion
-                + ",\n rndLlegadaAuto=" + rndLlegadaAuto
-                + ",\n rndCatAuto=" + rndCatAuto
-                + ",\n rndAtencion=" + rndAtencion
-                + ",\n siguienteEvento=" + siguienteEvento;
+                + " \n tiempoActual=" + tiempoActual
+                + " \n tiempoProximaLlegada=" + tiempoProximaLlegada
+                + " \n tiempoEntreLlegada=" + tiempoEntreLlegada
+                + " \n tiempoDemoraAtencion=" + tiempoFinAtencion
+                + " \n rndLlegadaAuto=" + rndLlegadaAuto
+                + " \n rndCatAuto=" + rndCatAuto
+                + " \n rndAtencion=" + rndAtencion
+                + " \n siguienteEvento=" + siguienteEvento;
 
     }
 

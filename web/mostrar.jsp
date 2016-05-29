@@ -85,7 +85,7 @@
 
 
             </c:forEach>
-
+                    
             <c:forEach  var="t" begin="${tiempoFin}" end="${cabinas-1}" varStatus="loop">
                 <c:if test="${tiempoFin != cabinas}">
                     <c:if test="${p.vec.tiempoActual != 0}">
@@ -101,19 +101,25 @@
             <c:set var="tiempoFin" scope="session" value="${0}"/>
 
 
-
+            <%-- ESTADO Y COLA DE LA CABINA --%>
             <c:forEach items="${p.cabinas}" var="t" varStatus="loop">
                 <c:set var="CabinaActual" scope="session" value="${loop.index+1}"/>
 
                 <c:if test="${t !=null}">
-                    <td> ${t.estado}</td>
+                    <c:if test="${t.estado == 'LIBRE'}">
+                        <td style="background-color: lightgreen"> ${t.estado}</td>
+                    </c:if>
+                    <c:if test="${t.estado != 'LIBRE'}">
+                        <td style="background-color: lightcoral"> ${t.estado}</td>
+                    </c:if>
+                    
 
                     <td> ${t.sizeCola}</td>
                 </c:if>
 
             </c:forEach>
 
-
+             <%--COMPLETO CON LO QUE FALTA estado y colas --%>       
             <c:forEach  var="t" begin="${CabinaActual}" end="${cabinas-1}" varStatus="loop">
                 <c:if test="${tiempoFin != cabinas}">
                     <td style="background-color: red">Deshabilitado</td>
@@ -138,6 +144,8 @@
 
 
         </c:if>
+                
+                
         <c:if test="${p.vec.siguienteEvento == 2}">
             <td>${loop.index}</td>
 
@@ -161,6 +169,7 @@
 
 
             </c:forEach>
+            <%--COMPLETO CON LO QUE FALTA los tiempos fin de Atencion --%>
             <c:forEach  var="t" begin="${tiempoFin}" end="${cabinas-1}" varStatus="loop">
                 <c:if test="${tiempoFin != cabinas}">
                     <td style="background-color: orange">Vacio 2</td>
@@ -171,23 +180,35 @@
             <c:set var="CabinaActual" scope="session" value="${0}"/>
             <c:set var="tiempoFin" scope="session" value="${0}"/>
 
+           <%-- ESTADO Y COLA DE LA CABINA --%>
             <c:forEach items="${p.cabinas}" var="t" varStatus="loop">
                 <c:set var="CabinaActual" scope="session" value="${loop.index+1}"/>
 
                 <c:if test="${t !=null}">
-                    <td> ${t.estado}</td>
+                    <c:if test="${t.estado == 'LIBRE'}">
+                        <td style="background-color: lightgreen"> ${t.estado}</td>
+                    </c:if>
+                    <c:if test="${t.estado != 'LIBRE'}">
+                        <td style="background-color: lightcoral"> ${t.estado}</td>
+                    </c:if>
+                    
 
                     <td> ${t.sizeCola}</td>
                 </c:if>
 
             </c:forEach>
+            <%--COMPLETO CON LO QUE FALTA estado y colas --%>
+             <c:forEach  var="t" begin="${CabinaActual}" end="${cabinas-1}" varStatus="loop">
+                <c:if test="${tiempoFin != cabinas}">
+                    <td style="background-color: red">Deshabilitado</td>
+                    <td>Sin cola</td>
 
 
-            <c:if test="${CabinaActual < cabinas}">
+                </c:if>
+            </c:forEach> 
 
-                <td style="background-color: red">Deshabilitado</td>
-                <td>Sin cola</td>
-            </c:if>
+
+            
             <td>${p.montoTotal}</td>
             <td>${p.cabinas.size()}</td>
             <td>Fin Atencion</td>

@@ -101,7 +101,7 @@ public class Cabina {
 
     @Override
     public String toString() {
-        return "Cabina{" + "estado=" + estado + ",\n colaAutos=" + colaAutos.toString() + '}';
+        return "\n Cabina{" + "estado=" + estado + ", colaAutos=" + colaAutos.toString() + '}';
     }
     
     
