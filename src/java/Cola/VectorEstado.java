@@ -44,7 +44,7 @@ public class VectorEstado {
         do {
             rndLlegadaAuto = Math.random();
         } while (rndLlegadaAuto == 0d);
-        tiempoEntreLlegada = -50 * Math.log(1 - rndLlegadaAuto);
+        tiempoEntreLlegada = -25* Math.log(1 - rndLlegadaAuto);
 
         tiempoProximaLlegada = tiempoActual + tiempoEntreLlegada;
         generarCatAuto();
@@ -116,13 +116,19 @@ public class VectorEstado {
         siguienteEvento = 2;
     }
 
-    public void generarTiempoAtencion(Auto auto) {
+    public void generarTiempoAtencion(Auto auto,int i) {
         rndAtencion = Math.random();
         auto.atender();
         auto.tiempoAtencion(rndCatAuto);
 
         tiempoDemoraAtencion = auto.getTiempoAtencion();
+        if(i>=tiempoFinAtencion.size()){
         tiempoFinAtencion.add(tiempoActual + tiempoDemoraAtencion);
+            
+        }else{
+        tiempoFinAtencion.add(i,tiempoActual + tiempoDemoraAtencion);
+            
+        }
 //        System.out.println("TIEMPOS FIN ATENCION:"+tiempoFinAtencion.toString());
     }
 
@@ -152,10 +158,11 @@ public class VectorEstado {
     public double menorTiempoAtencion() {
         double menorT = 0d;
         menorT = tiempoFinAtencion.get(0);
-
+        numeroCabina=0;
         for (int i = 0; i < tiempoFinAtencion.size(); i++) {
             if(menorT>tiempoFinAtencion.get(i)){
                 menorT=tiempoFinAtencion.get(i);
+                numeroCabina=i;
             }
         }
         return menorT;

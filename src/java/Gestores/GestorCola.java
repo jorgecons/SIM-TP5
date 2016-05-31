@@ -15,8 +15,6 @@ import Dominio.AutoCat5;
 import Dominio.Cabina;
 import Interfaces.Auto;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 
 /**
  *
@@ -31,12 +29,12 @@ public class GestorCola {
     private ArrayList<Cabina> listadoCabinas;
     private ArrayList<Auto> autos;
     private int maximaCantidadAutos;
-    private int numeroCabina;
+//    private int numeroCabina;
     private int contador;
     private double tiempoSimulacion;
     private int montoToal;
     private int numeroMaxCabina;
-    private int numeroActualDeCabinas;
+//    private int numeroActualDeCabinas;
 
     public GestorCola(double tiempo) {
         vectorEstado = new VectorEstado[2];
@@ -45,7 +43,7 @@ public class GestorCola {
         vectorEstado[0] = new VectorEstado(tiempoActual);
         contador = 0;
         montoToal = 0;
-        numeroCabina = -1;
+//        numeroCabina = -1;
         numeroMaxCabina = 1;
         tiempoSimulacion = tiempo;
         listadoCabinas = new ArrayList<>();
@@ -72,7 +70,9 @@ public class GestorCola {
             System.out.println("Vuelta: " + i);
             nuevaLinea();
             i++;
-
+            if (i == 50) {
+                break;
+            }
         }
 
 //        System.out.println(toString());
@@ -123,26 +123,16 @@ public class GestorCola {
             if (aut != null) {
 
                 vec.setTiempoFinAtencion(vectorEstado[1].getTiempoFinAtencion());
-
-                aut = vec.getAuto();
+//                vec.getTiempoFinAtencion().remove(vectorEstado[1].getNumeroCabina());
+                aut = vectorEstado[1].getAuto();
                 asignarACabina(aut, vec);
                 autos.add(aut);
                 maximoTamAutos();
-//                System.out.println("AUTO: " + aut.toString());
-            } else {
-                vec.setTiempoFinAtencion(vectorEstado[1].getTiempoFinAtencion());
-                aut = vec.getAuto();
-                asignarACabina(aut, vec);
-                //ACA HAY QUE SABER A QUE CABINA LE SACAS EL AUTO
-                vec.menorTiempo();
 
-                autos.add(aut);
-                maximoTamAutos();
-//                System.out.println("AUTO: " + aut.toString());
-
+//
             }
 
-//            vec.menorTiempo();
+            vec.menorTiempo();
 //            System.out.println("Hola");
             //            System.out.println("TIEMPO ACTUAL: " + tiempoActual);
 //            System.out.println("PROXIMA LLEGADA : " + vec.getTiempoProximaLlegada());
@@ -157,33 +147,51 @@ public class GestorCola {
 //EVENTO 2--------------------------
         //-------------------------------------------------------------------------------
         if (vectorEstado[1].getSiguienteEvento() == 2) {
-            
-            Auto aut = liberarCabina();
 
-            montoToal += autos.remove(0).costoPeaje();
+        //    System.out.println("Cabina a Liberar: " + (vectorEstado[1].getNumeroCabina() - 1));
+        //    System.out.println("Numero de cabinas: " + listadoCabinas.size());
+            Auto aut = liberarCabina(vectorEstado[1].getNumeroCabina() - 1);
+        //    System.out.println("-------------------------------------");
+            if (aut != null) {
+        //        System.out.println("Auto:" + aut.toString());
+            }
+         //   System.out.println("-------------------------------------");
+
+            eliminarAuto(vectorEstado[1].getNumeroCabina() - 1);
             //hay un auto en la cola...
             if (aut != null) {
-                System.out.println("EXISTE AUTO, ETRO EN LA CONCHA DE TU HERMANA");
+                System.out.println("Me meto aca... hay auto");
                 if (vectorEstado[1].getTiempoProximaLlegada() != 0) {
                     vec.setTiempoProximaLlegada(vectorEstado[1].getTiempoProximaLlegada());
 
                 }
-                asignarACabina(aut, vec);
+                vec.setTiempoFinAtencion(vectorEstado[1].getTiempoFinAtencion());
+         //       System.out.println("Teimpos del anterior:" + vec.getTiempoFinAtencion().toString());
+                vec.getTiempoFinAtencion().remove(vectorEstado[1].getNumeroCabina());
+           //     System.out.println("Teimpos eliminando :" + vec.getTiempoFinAtencion().toString());
+             //   System.out.println("---------------------------------------------");
+
+                asignarACabina(aut, vec, (vectorEstado[1].getNumeroCabina() - 1));
+               // System.out.println("Teimpos agregando:" + vec.getTiempoFinAtencion().toString());
                 //vec.getTiempoFinAtencion().remove(0);
                 maximoTamAutos();
                 vec.menorTiempo();
+                vec.setAuto(vectorEstado[1].getAuto());
 //                System.out.println("TIEMPO ACTUAL: " + tiempoActual);
 //                System.out.println("PROXIMA LLEGADA : " + vec.getTiempoProximaLlegada());
 //                System.out.println("FIN ATENCION : " + vec.getTiempoFinAtencion().toString());
 //                System.out.println("CABINA: " + cabina.toString());
 //                System.out.println("AUTO: " + aut.toString());
             } else {
-
+                System.out.println("Me meto aca en el else");
                 if (vectorEstado[1].getTiempoProximaLlegada() != 0) {
                     vec.setTiempoProximaLlegada(vectorEstado[1].getTiempoProximaLlegada());
 
                 }
+                vec.setTiempoFinAtencion(vectorEstado[1].getTiempoFinAtencion());
+                vec.getTiempoFinAtencion().remove(vectorEstado[1].getNumeroCabina());
                 vec.menorTiempo();
+                vec.setAuto(vectorEstado[1].getAuto());
 //                System.out.println("TIEMPO ACTUAL: " + tiempoActual);
 //                System.out.println("PROXIMA LLEGADA : " + vec.getTiempoProximaLlegada());
 //                System.out.println("FIN ATENCION : " + vec.getTiempoFinAtencion());
@@ -196,11 +204,11 @@ public class GestorCola {
 //            System.out.println("******************************************************");
 //            System.out.println("--------------------------------");
         }
-        
-        if (numeroActualDeCabinas > numeroMaxCabina) {
-            numeroMaxCabina =  numeroActualDeCabinas;
-        }
 
+//        if (numeroActualDeCabinas > numeroMaxCabina) {
+//            numeroMaxCabina =  numeroActualDeCabinas;
+//        }
+      //  System.out.println("Cabinas:\n-----------------------------------\n" + listadoCabinas.toString());
         addVector(vec);
         addAux(vec);
     }
@@ -252,7 +260,7 @@ public class GestorCola {
             caux.setEstado(listadoCabinas.get(i).getEstado());
             caux.setSizeCola(listadoCabinas.get(i).getColaAutos().size());
             aux.add(caux);
-            System.out.println("Cabia: " + i + 1 + caux.getSizeCola());
+            //   System.out.println("Cabia: " + i + 1 + caux.getSizeCola());
         }
 
         VectorAux vaux = new VectorAux(vec, aux, autox, taux, montoToal);
@@ -266,84 +274,48 @@ public class GestorCola {
 
     }
 
+    public void eliminarAuto(int position) {
+        if (position == -1) {
+            montoToal += autos.remove(0).costoPeaje();
+            
+        } else {
+            for (int i = position*4 +1; i < autos.size(); i++) {
+             //   System.out.println("Position autos: "+i);
+                if("SIENDO ATENDIDO".equals(autos.get(i).getEstado())){
+                   montoToal+= autos.remove(i).costoPeaje();
+                   break;
+                }
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "GestorCola{" + "vectorEstadoaux=\n" + vectorEstadoaux.toString() + '}';
     }
 
     //libero cabina y obtengo si hay autos en la cola
-    public Auto liberarCabina() {
+    public Auto liberarCabina(int cabinaALiberar) {
         Auto aut = null;
 
-<<<<<<< HEAD
-       if (numeroCabina == -1) {
-=======
-//        if (numeroCabina == -1) {
-        //prgunto si hay una listado de cabinas
-        //en caso de no estar vacio, entro
-        if (!listadoCabinas.isEmpty()) {
-            //recorrro todas las cabinas
-            for (Iterator<Cabina> iterator = listadoCabinas.iterator(); iterator.hasNext();) {
-                Cabina next = iterator.next();
-                next.liberar();
-                System.out.println("LIBERO LA CABINA DEL LISTADO: " + next.toString());
-
-                if (!next.estaVacio()) {
-
-                    aut = next.siguienteAuto();
-
-                }else{
-                    //en caso de estar vacio no puede estar libre, para eso tengo la 1.
-                    //encotnce la deshabilito sacandola del listado de cabinas
-                    System.out.println("DESHABILITO");
-                    //aca daba errro xq no restaba al contador de cabinas
-                    numeroActualDeCabinas--;
-                    listadoCabinas.remove(next);
-                    System.out.println("Esta vacio ?" + listadoCabinas.isEmpty());
-                    return aut;
-                    
-                }
->>>>>>> origin/master
-
-            }
-
-        } else {
-            //en caso de no existir mas cabinas hsabilitadas, voy a la primera
-             //System.out.println("LIBERO LA CABINA 1: " + cabina.toString());
+        if (cabinaALiberar == -1) {
             cabina.liberar();
-
             if (!cabina.estaVacio()) {
-
                 aut = cabina.siguienteAuto();
+            }
+        } else {
 
-<<<<<<< HEAD
-           }
-        }else{
-            
-            listadoCabinas.get(numeroCabina).liberar();
-            if(listadoCabinas.get(numeroCabina).estaVacio()){
-                aut= listadoCabinas.get(numeroCabina).siguienteAuto();
-                if(listadoCabinas.get(numeroCabina).estaVacio()){
-                    listadoCabinas.remove(listadoCabinas.get(numeroCabina));
-                }
+            listadoCabinas.get(cabinaALiberar).liberar();
+           // System.out.println("Numero cabina: " + cabinaALiberar);
+            if (!listadoCabinas.get(cabinaALiberar).estaVacio()) {
+                aut = listadoCabinas.get(cabinaALiberar).siguienteAuto();
+            } else {
+                listadoCabinas.remove(cabinaALiberar);
             }
         }
-=======
-            }
-        }
-//        }else{
-//            Cabina cab=listadoCabinas.get(numeroCabina);
-//            listadoCabinas.get(numeroCabina).liberar();
-//            if(!cab.estaVacio()){
-//                aut= listadoCabinas.get(numeroCabina).siguienteAuto();
-//                if(cab.estaVacio()){
-//                    listadoCabinas.remove(cab);
-//                }
-//            }
-//        }
->>>>>>> origin/master
 
         return aut;
+
     }
 
     public int getNumeroMaxCabina() {
@@ -358,17 +330,42 @@ public class GestorCola {
         return vectorEstadoaux;
     }
 
+    public void asignarACabina(Auto auto, VectorEstado vec, int position) {
+        if (position == -1) {
+            if (cabina.estaLibre()) {
+               // System.out.println("CABINA LIBRE");
+                vec.generarTiempoAtencion(auto, 0);
+
+                cabina.ocupar();
+                return;
+            }
+            if (cabina.estaDisponible()) {
+              //  System.out.println("CABINA DISPONIBLE");
+                cabina.añadirAuto(auto);
+            }
+        } else {
+           // System.out.println("VIENDO QUE PUTA CABINA ANDA");
+            //System.out.println("CABINAS ACA ESTOY: " + listadoCabinas.toString());
+            listadoCabinas.get(position).ocupar();
+
+            vec.generarTiempoAtencion(auto, (position + 1));
+            //System.out.println("ACA ESTOY: " + (position + 1));
+
+        }
+    }
+
+    //DEBERIA SABER A QUE CABINA VOLVER A OCUPAR..... ESO ES LO QUE PASA
     public void asignarACabina(Auto auto, VectorEstado vec) {
 
         if (cabina.estaLibre()) {
-
-            vec.generarTiempoAtencion(auto);
+           // System.out.println("CABINA LIBRE");
+            vec.generarTiempoAtencion(auto, 0);
 
             cabina.ocupar();
             return;
         }
         if (cabina.estaDisponible()) {
-
+          //  System.out.println("CABINA DISPONIBLE");
             cabina.añadirAuto(auto);
             return;
         }
@@ -377,28 +374,26 @@ public class GestorCola {
         if (listadoCabinas.isEmpty()) {
 
             Cabina cabin = new Cabina();
-            
-            vec.generarTiempoAtencion(auto);
-            cabin.ocupar();
-<<<<<<< HEAD
 
-            
-=======
+            vec.generarTiempoAtencion(auto, 1);
+            cabin.ocupar();
+
             //esta mal echo las forma de guardar el maximo
-            
-            numeroActualDeCabinas=2;
-            
-            numeroCabina = 0;
->>>>>>> origin/master
+            numeroMaxCabina = 2;
+//            
+//            numeroCabina = 0;
+
             listadoCabinas.add(cabin);
-            System.out.println("Agrego la primer CABINA");
+          //  System.out.println("Agrego la primer CABINA");
 
         } else {
-
+         //   System.out.println("VIENDO QUE PUTA CABINA ANDA");
+         //   System.out.println("CABINAS ACA ESTOY: " + listadoCabinas.toString());
             for (int i = 0; i < listadoCabinas.size(); i++) {
                 if (listadoCabinas.get(i).estaLibre()) {
                     listadoCabinas.get(i).ocupar();
-                    vec.generarTiempoAtencion(auto);
+                    vec.generarTiempoAtencion(auto, (i + 1));
+            //        System.out.println("ACA ESTOY: " + (i + 1));
                     return;
                 }
                 if (listadoCabinas.get(i).estaDisponible()) {
@@ -408,15 +403,14 @@ public class GestorCola {
 
             }
             if (listadoCabinas.get(listadoCabinas.size() - 1).estaLleno()) {
-                System.out.println("Agrego una NUEVA CABINA");
+                //    System.out.println("Agrego una NUEVA CABINA");
                 Cabina cabin = new Cabina();
-                numeroActualDeCabinas++;
-                vec.generarTiempoAtencion(auto);
+                numeroMaxCabina++;
+                vec.generarTiempoAtencion(auto, listadoCabinas.size() + 1);
                 cabin.ocupar();
 
                 //numeroCabina = listadoCabinas.size();
                 listadoCabinas.add(cabin);
-                return;
             }
         }
 

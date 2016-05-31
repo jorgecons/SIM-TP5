@@ -45,7 +45,7 @@
         <th>Numero de Cabinas</th>
         <th>Siguiente Evento</th>
 
-        <th colspan="${maximoTam*2}">Autos</th>
+        <th colspan="${maximoTam*3}">Autos</th>
 
 
     </thead>
@@ -57,13 +57,43 @@
             <c:if test="${p.vec.siguienteEvento == 1}">
             <td>${loop.index}</td>
             <td> <fmt:formatNumber value="${p.vec.tiempoActual}" maxFractionDigits="3"></fmt:formatNumber> </td>
-            <td> <fmt:formatNumber value="${p.vec.rndLlegadaAuto}" maxFractionDigits="3"></fmt:formatNumber> </td>
-            <td> <fmt:formatNumber value="${p.vec.tiempoEntreLlegada}" maxFractionDigits="3"></fmt:formatNumber></td>
+            <c:if test="${p.vec.rndLlegadaAuto==0}">
+                <td></td>
+                <td></td>
+            </c:if>
+            <c:if test="${p.vec.rndLlegadaAuto!=0}">
+                <td><fmt:formatNumber value="${p.vec.rndLlegadaAuto}" maxFractionDigits="3"></fmt:formatNumber> </td>
+                <td> <fmt:formatNumber value="${p.vec.tiempoEntreLlegada}" maxFractionDigits="3"></fmt:formatNumber></td>
+            </c:if>
+
             <td style="background-color: chartreuse"> <fmt:formatNumber value="${p.vec.tiempoProximaLlegada}" maxFractionDigits="3"></fmt:formatNumber></td>
-            <td> <fmt:formatNumber value="${p.vec.rndCatAuto}" maxFractionDigits="3"></fmt:formatNumber></td>
+
+            <c:if test="${p.vec.rndCatAuto==0}">
+                <td></td>
+            </c:if>
+            <c:if test="${p.vec.rndCatAuto!=0}">
+                <td> <fmt:formatNumber value="${p.vec.rndCatAuto}" maxFractionDigits="3"></fmt:formatNumber></td>
+            </c:if>
+
             <td> ${p.vec.auto.categoria}</td>
-            <td> <fmt:formatNumber value="${p.vec.rndAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
-            <td> <fmt:formatNumber value="${p.vec.tiempoDemoraAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
+
+            <c:if test="${p.vec.rndAtencion==0}">
+                <td></td>
+                <td></td>
+            </c:if>
+            <c:if test="${p.vec.tiempoDemoraAtencion==30}">
+                <c:if test="${p.vec.rndAtencion!=0}">
+                    <td></td>
+                </c:if>
+                <td> <fmt:formatNumber value="${p.vec.tiempoDemoraAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
+            </c:if>
+            <c:if test="${p.vec.tiempoDemoraAtencion!=30}">
+                <c:if test="${p.vec.rndAtencion!=0}">
+                    <td> <fmt:formatNumber value="${p.vec.rndAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
+                    <td> <fmt:formatNumber value="${p.vec.tiempoDemoraAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
+                </c:if>
+            </c:if>
+
             <%-- LA PRIMERA LINEA --%>        
 
             <c:forEach  var="t" begin="${1}" end="${cabinas}" varStatus="loop">
@@ -85,7 +115,7 @@
 
 
             </c:forEach>
-                    
+
             <c:forEach  var="t" begin="${tiempoFin}" end="${cabinas-1}" varStatus="loop">
                 <c:if test="${tiempoFin != cabinas}">
                     <c:if test="${p.vec.tiempoActual != 0}">
@@ -112,14 +142,14 @@
                     <c:if test="${t.estado != 'LIBRE'}">
                         <td style="background-color: lightcoral"> ${t.estado}</td>
                     </c:if>
-                    
+
 
                     <td> ${t.sizeCola}</td>
                 </c:if>
 
             </c:forEach>
 
-             <%--COMPLETO CON LO QUE FALTA estado y colas --%>       
+            <%--COMPLETO CON LO QUE FALTA estado y colas --%>       
             <c:forEach  var="t" begin="${CabinaActual}" end="${cabinas-1}" varStatus="loop">
                 <c:if test="${tiempoFin != cabinas}">
                     <td style="background-color: red">Deshabilitado</td>
@@ -134,6 +164,7 @@
             <c:forEach items="${p.autos}" var="t" varStatus="loop">
                 <td> ${t.categoria}</td>
                 <td> ${t.estado}</td>
+                <td><fmt:formatNumber value=" ${t.tiempoAtencion}" maxFractionDigits="3"></fmt:formatNumber></td> 
 
             </c:forEach>
 
@@ -144,19 +175,48 @@
 
 
         </c:if>
-                
-                
+
+
         <c:if test="${p.vec.siguienteEvento == 2}">
             <td>${loop.index}</td>
 
             <td> <fmt:formatNumber value="${p.vec.tiempoActual}" maxFractionDigits="3"></fmt:formatNumber> </td>
-            <td> <fmt:formatNumber value="${p.vec.rndLlegadaAuto}" maxFractionDigits="3"></fmt:formatNumber> </td>
-            <td> <fmt:formatNumber value="${p.vec.tiempoEntreLlegada}" maxFractionDigits="3"></fmt:formatNumber></td>
+
+            <c:if test="${p.vec.rndLlegadaAuto==0}">
+                <td></td>
+                <td></td>
+            </c:if>
+            <c:if test="${p.vec.rndLlegadaAuto!=0}">
+                <td><fmt:formatNumber value="${p.vec.rndLlegadaAuto}" maxFractionDigits="3"></fmt:formatNumber> </td>
+                <td> <fmt:formatNumber value="${p.vec.tiempoEntreLlegada}" maxFractionDigits="3"></fmt:formatNumber></td>
+            </c:if>
+
             <td>  <fmt:formatNumber value="${p.vec.tiempoProximaLlegada}" maxFractionDigits="3"></fmt:formatNumber></td>
-            <td> <fmt:formatNumber value="${p.vec.rndCatAuto}" maxFractionDigits="3"></fmt:formatNumber></td>
+
+            <c:if test="${p.vec.rndCatAuto==0}">
+                <td></td>
+            </c:if>
+            <c:if test="${p.vec.rndCatAuto!=0}">
+                <td> <fmt:formatNumber value="${p.vec.rndCatAuto}" maxFractionDigits="3"></fmt:formatNumber></td>
+            </c:if>
             <td> ${p.vec.auto.categoria}</td>
-            <td> <fmt:formatNumber value="${p.vec.rndAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
-            <td> <fmt:formatNumber value="${p.vec.tiempoDemoraAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
+
+            <c:if test="${p.vec.rndAtencion==0}">
+                <td></td>
+                <td></td>
+            </c:if>
+            <c:if test="${p.vec.tiempoDemoraAtencion==30}">
+                <c:if test="${p.vec.rndAtencion!=0}">
+                    <td></td>
+                </c:if>
+                <td> <fmt:formatNumber value="${p.vec.tiempoDemoraAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
+            </c:if>
+            <c:if test="${p.vec.tiempoDemoraAtencion!=30}">
+                <c:if test="${p.vec.rndAtencion!=0}">
+                    <td> <fmt:formatNumber value="${p.vec.rndAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
+                    <td> <fmt:formatNumber value="${p.vec.tiempoDemoraAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
+                </c:if>
+            </c:if>
 
             <%--Veo los tiempos fin de Atencion --%>
             <c:forEach items="${p.tiempos}" var="t" varStatus="loop">
@@ -164,8 +224,14 @@
                 <c:set var="tiempoFin" scope="session" value="${loop.index+1}"/>
 
 
-                <td> <fmt:formatNumber value="${t}" maxFractionDigits="3"></fmt:formatNumber></td>
-
+                <c:if test="${p.vec.numeroCabina==loop.index}"> 
+                    <td style="background-color: chartreuse"> 
+                        <fmt:formatNumber value="${t}" maxFractionDigits="3"></fmt:formatNumber>
+                        </td>
+                </c:if>
+                <c:if test="${p.vec.numeroCabina!=loop.index}">
+                    <td><fmt:formatNumber value="${t}" maxFractionDigits="3"></fmt:formatNumber></td>
+                </c:if>
 
 
             </c:forEach>
@@ -180,7 +246,7 @@
             <c:set var="CabinaActual" scope="session" value="${0}"/>
             <c:set var="tiempoFin" scope="session" value="${0}"/>
 
-           <%-- ESTADO Y COLA DE LA CABINA --%>
+            <%-- ESTADO Y COLA DE LA CABINA --%>
             <c:forEach items="${p.cabinas}" var="t" varStatus="loop">
                 <c:set var="CabinaActual" scope="session" value="${loop.index+1}"/>
 
@@ -191,14 +257,14 @@
                     <c:if test="${t.estado != 'LIBRE'}">
                         <td style="background-color: lightcoral"> ${t.estado}</td>
                     </c:if>
-                    
+
 
                     <td> ${t.sizeCola}</td>
                 </c:if>
 
             </c:forEach>
             <%--COMPLETO CON LO QUE FALTA estado y colas --%>
-             <c:forEach  var="t" begin="${CabinaActual}" end="${cabinas-1}" varStatus="loop">
+            <c:forEach  var="t" begin="${CabinaActual}" end="${cabinas-1}" varStatus="loop">
                 <c:if test="${tiempoFin != cabinas}">
                     <td style="background-color: red">Deshabilitado</td>
                     <td>Sin cola</td>
@@ -208,13 +274,14 @@
             </c:forEach> 
 
 
-            
+
             <td>${p.montoTotal}</td>
             <td>${p.cabinas.size()}</td>
             <td>Fin Atencion</td>
             <c:forEach items="${p.autos}" var="t" varStatus="loop">
                 <td> ${t.categoria}</td>
                 <td> ${t.estado}</td>
+                <td><fmt:formatNumber value=" ${t.tiempoAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
 
             </c:forEach>
 
