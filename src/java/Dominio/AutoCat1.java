@@ -46,7 +46,7 @@ public class AutoCat1 extends Auto {
 
     @Override
     public double tiempoAtencion(double RND) {
-        tiempoAtencion = 30;
+        tiempoAtencion = (double)30;
         return tiempoAtencion;
     }
     

@@ -15,12 +15,12 @@
     <center><h1>TP5 - Simulación</h1></center>
         
         <h3>Ejercicio 51</h3>
-        <p>A un peaje llegan vehículos respetando una distribución exponencial negativa con media = 3’ y desviación estándar 1’,  
+        <p>A un peaje llegan vehículos respetando una distribución exponencial negativa con media = 2’ y desviación estándar 1’,  
             con la siguiente probabilidad de tipo de vehículo, de tiempo de atención y costo del peaje: </p>
         <table border="1 px"  cellpadding="6px" style="text-align: center">
             <tr>
 
-                <td><strong>Categoria</strong></td>
+                <td style="background-color: khaki"><strong>Categoria</strong></td>
                
                 <td>1</td>
                 <td>2</td>
@@ -30,7 +30,7 @@
                 
             </tr> 
             <tr>
-                <td><strong>Probabilidad de Vehiculo</strong></td>        
+                <td style="background-color: khaki"><strong>Probabilidad de Vehiculo</strong></td>        
                 <td>0,10</td>
                 <td>0,50</td>
                 <td>0,15</td>
@@ -39,7 +39,7 @@
                 
             </tr>
             <tr>
-                <td><strong>Tiempo Atencion</strong></td>        
+                <td style="background-color: khaki"><strong>Tiempo Atencion</strong></td>        
                 <td>30''</td>
                 <td>50'' ± 5''</td>
                 <td>1' 10'' ± 15''</td>
@@ -48,7 +48,7 @@
                 
             </tr>
             <tr>
-                <td><strong>Costo Peaje</strong></td>        
+                <td style="background-color: khaki"><strong>Costo Peaje</strong></td>        
                 <td>0</td>
                 <td>3</td>
                 <td>6</td>
@@ -63,8 +63,10 @@
             cuando no hay cola se la deshabilita (siempre hay por lo menos una cabina habilitada), 
             no hay límite en la posibilidad de habilitar cabinas. </p>
 <p>Determine: </p>
-<p>a)	Número maximo de cabinas habilitadas </p>
+<p>a)	Número máximo de cabinas habilitadas </p>
 <p>b)	Monto recaudado  </p>
+<p>c)	Numero máximo de autos en el sistema  </p>
+
 
 
 <form method="post" action="${pageContext.request.contextPath}/ServidorCola" name="datos">

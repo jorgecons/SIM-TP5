@@ -26,7 +26,7 @@ public class VectorEstado {
 
     public VectorEstado(double tiempoActual) {
         this.tiempoActual = tiempoActual;
-        tiempoFinAtencion=new ArrayList<>();
+        tiempoFinAtencion = new ArrayList<>();
 
     }
 
@@ -44,7 +44,7 @@ public class VectorEstado {
         do {
             rndLlegadaAuto = Math.random();
         } while (rndLlegadaAuto == 0d);
-        tiempoEntreLlegada = -25* Math.log(1 - rndLlegadaAuto);
+        tiempoEntreLlegada = -100 * Math.log(1 - rndLlegadaAuto);
 
         tiempoProximaLlegada = tiempoActual + tiempoEntreLlegada;
         generarCatAuto();
@@ -116,39 +116,45 @@ public class VectorEstado {
         siguienteEvento = 2;
     }
 
-    public void generarTiempoAtencion(Auto auto,int i) {
+    public void generarTiempoAtencion(Auto auto, int i) {
         rndAtencion = Math.random();
         auto.atender();
-        auto.tiempoAtencion(rndCatAuto);
-
+        
+        auto.tiempoAtencion(rndAtencion);
+        
         tiempoDemoraAtencion = auto.getTiempoAtencion();
-        if(i>=tiempoFinAtencion.size()){
-        tiempoFinAtencion.add(tiempoActual + tiempoDemoraAtencion);
-            
-        }else{
-        tiempoFinAtencion.add(i,tiempoActual + tiempoDemoraAtencion);
-            
+        if (tiempoFinAtencion.isEmpty()) {
+            tiempoFinAtencion.add(tiempoActual + tiempoDemoraAtencion);
+            return;
         }
-//        System.out.println("TIEMPOS FIN ATENCION:"+tiempoFinAtencion.toString());
+        if (i >= tiempoFinAtencion.size()) {
+            tiempoFinAtencion.add(tiempoActual + tiempoDemoraAtencion);
+
+        } else {
+            if (tiempoFinAtencion.get(i) == 0) {
+                tiempoFinAtencion.set(i, tiempoActual + tiempoDemoraAtencion);
+            } else {
+                tiempoFinAtencion.add(i, tiempoActual + tiempoDemoraAtencion);
+            }
+        }
     }
 
     public double menorTiempo() {
         if (tiempoProximaLlegada != 0) {
             if (!tiempoFinAtencion.isEmpty()) {
-                double menorT= menorTiempoAtencion();
+                double menorT = menorTiempoAtencion();
                 if (tiempoProximaLlegada < menorT) {
                     siguienteEvento = 1;
-                  
 
                     return tiempoProximaLlegada;
                 } else {
                     siguienteEvento = 2;
-                   
+
                     return menorT;
                 }
             } else {
                 siguienteEvento = 1;
-                   
+
                 return tiempoProximaLlegada;
             }
         }
@@ -157,12 +163,12 @@ public class VectorEstado {
 
     public double menorTiempoAtencion() {
         double menorT = 0d;
-        menorT = tiempoFinAtencion.get(0);
-        numeroCabina=0;
+        menorT = 500000d;
+        numeroCabina = 0;
         for (int i = 0; i < tiempoFinAtencion.size(); i++) {
-            if(menorT>tiempoFinAtencion.get(i)){
-                menorT=tiempoFinAtencion.get(i);
-                numeroCabina=i;
+            if (menorT > tiempoFinAtencion.get(i) && tiempoFinAtencion.get(i) != 0) {
+                menorT = tiempoFinAtencion.get(i);
+                numeroCabina = i;
             }
         }
         return menorT;
@@ -183,8 +189,6 @@ public class VectorEstado {
     public void setTiempoFinAtencion(ArrayList<Double> tiempoFinAtencion) {
         this.tiempoFinAtencion = tiempoFinAtencion;
     }
-
-    
 
 //    
     public double getTiempoEntreLlegada() {

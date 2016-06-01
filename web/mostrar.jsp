@@ -16,8 +16,10 @@
     <body>
     <center><h1 >TP5 - Simulación de Colas</h1></center>
 
-    <h3>El monto total recaudado en ${tiempo} segundos, es de ${monto}</h3>
-    <h3>Se habilitaron un total de ${cabinas} cabinas</h3>
+    <h3>El monto total recaudado en ${tiempo} segundos, es de ${monto}.</h3>
+    <h3>Se habilitaron un total de ${cabinas} cabinas.</h3>
+    <h3>La maxima cantidad de autos en el sistema es de ${maximoTam}.</h3>
+    
 
     <%-- INICIO TABLA--%>      
     <table  class="table" border="1" style="width:100% ; text-align: center">
@@ -162,9 +164,18 @@
             <td>${p.cabinas.size()}</td>
             <td>Llegada Auto</td>
             <c:forEach items="${p.autos}" var="t" varStatus="loop">
-                <td> ${t.categoria}</td>
-                <td> ${t.estado}</td>
-                <td><fmt:formatNumber value=" ${t.tiempoAtencion}" maxFractionDigits="3"></fmt:formatNumber></td> 
+
+                <c:if test="${t.estado == 'SIENDO ATENDIDO'}"> 
+                    <td> ${t.categoria}</td>
+                    <td style="background-color: lightblue"> ${t.estado}</td>
+                    <td><fmt:formatNumber value=" ${t.tiempoAtencion}" maxFractionDigits="3"></fmt:formatNumber></td> 
+                </c:if>
+                <c:if test="${t.estado != 'SIENDO ATENDIDO'}"> 
+                    <td> ${t.categoria}</td>
+                    <td > ${t.estado}</td>
+                    <td><fmt:formatNumber value=" ${t.tiempoAtencion}" maxFractionDigits="3"></fmt:formatNumber></td> 
+                </c:if>
+
 
             </c:forEach>
 
@@ -279,9 +290,16 @@
             <td>${p.cabinas.size()}</td>
             <td>Fin Atencion</td>
             <c:forEach items="${p.autos}" var="t" varStatus="loop">
-                <td> ${t.categoria}</td>
-                <td> ${t.estado}</td>
-                <td><fmt:formatNumber value=" ${t.tiempoAtencion}" maxFractionDigits="3"></fmt:formatNumber></td>
+                <c:if test="${t.estado == 'SIENDO ATENDIDO'}"> 
+                    <td> ${t.categoria}</td>
+                    <td style="background-color: lightblue"> ${t.estado}</td>
+                    <td><fmt:formatNumber value=" ${t.tiempoAtencion}" maxFractionDigits="3"></fmt:formatNumber></td> 
+                </c:if>
+                <c:if test="${t.estado != 'SIENDO ATENDIDO'}"> 
+                    <td> ${t.categoria}</td>
+                    <td > ${t.estado}</td>
+                    <td><fmt:formatNumber value=" ${t.tiempoAtencion}" maxFractionDigits="3"></fmt:formatNumber></td> 
+                </c:if>
 
             </c:forEach>
 
