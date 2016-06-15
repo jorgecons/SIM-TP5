@@ -45,7 +45,7 @@ public class GestorCola {
         vectorEstado = new VectorEstado[2];
         vectorEstado[0] = new VectorEstado(tiempoActual);
         vectorEstado[0].lineaCero();
-        iaux = 0;
+        iaux = 2;
         cabina = new Cabina();
         listadoCabinas = new ArrayList<>();
 
@@ -86,7 +86,7 @@ public class GestorCola {
         asignarACabina(aut, vec);
         autos.add(aut);
         maximoTamAutos();
-
+        vec.setEventoActual(vectorEstado[0].getSiguienteEvento());
         vectorEstado[1] = vec;
         addAux(vec);
 
@@ -121,7 +121,12 @@ public class GestorCola {
             } else {
                 autos.add(aut);
             }
-
+            iaux++;
+            System.out.println("Llegana nº: "+iaux);
+            if(iaux==40){
+                System.out.println("ACA OCURRIO");
+                
+            }
         }
 
         //EVENTO 2       
@@ -147,7 +152,7 @@ public class GestorCola {
                 if (cabina.estaLibre()) {
                     //existe una cabina trabajando cuando la cabina sola esta libre
                     if (vectorEstado[1].getTiempoFinAtencion().size() > 1) {
-                       //le seteo el tiempoFin de la pos 0, de la cabina sola, en 0
+                        //le seteo el tiempoFin de la pos 0, de la cabina sola, en 0
                         vec.getTiempoFinAtencion().set(0, 0d);
                     } else {
                         //si no hay cabinas trabajando, elimino la que corresponde
@@ -177,7 +182,7 @@ public class GestorCola {
                 if (cabina.estaLibre()) {
                     //hay una cabina habilitada
                     if (vectorEstado[1].getTiempoFinAtencion().size() > 1) {
-                        
+
                         //seteo el tiempoFin en la pos 0 en 0 que es de la cabina sola
                         vec.getTiempoFinAtencion().set(0, 0d);
                         //quito el tiempo fin que coincide con el tiempo Actual
@@ -203,7 +208,7 @@ public class GestorCola {
 //            System.out.println("numer"+(vectorEstado[1].getTiempoFinAtencion().get(1) + 1000));
 //            iaux++;
 //        }
-
+        vec.setEventoActual(vectorEstado[1].getSiguienteEvento());
         //calculo el tamaño maximo de autos en el sistema 
         maximoTamAutos();
         //añado el vector en el de simulacion y en el de mostrar
@@ -284,7 +289,6 @@ public class GestorCola {
 
     public void eliminarAuto(int position) {
         if (cabina.estaLibre() && position == -1 && !listadoCabinas.isEmpty() && !autos.isEmpty()) {
-
             montoToal += autos.remove(0).costoPeaje();
             return;
         }

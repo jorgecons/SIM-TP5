@@ -21,6 +21,7 @@ public class VectorEstado {
     private double tiempoEntreLlegada, tiempoDemoraAtencion;
     private double rndLlegadaAuto, rndCatAuto, rndAtencion;
     private int siguienteEvento;//para saber que evento es el que sigue; 1- llegada, 2- fin atencion;
+    private int eventoActual;
     private Auto auto;
     private int numeroCabina;
 
@@ -34,6 +35,7 @@ public class VectorEstado {
         this.tiempoActual = 0d;
         nuevaLlegadaAuto();
         siguienteEvento = 1;
+        eventoActual=0;
     }
 
     public void setTiempoActual(double tiempoActual) {
@@ -44,7 +46,7 @@ public class VectorEstado {
         do {
             rndLlegadaAuto = Math.random();
         } while (rndLlegadaAuto == 0d);
-        tiempoEntreLlegada = -100 * Math.log(1 - rndLlegadaAuto);
+        tiempoEntreLlegada = -120 * Math.log(1 - rndLlegadaAuto);
 
         tiempoProximaLlegada = tiempoActual + tiempoEntreLlegada;
         generarCatAuto();
@@ -71,6 +73,15 @@ public class VectorEstado {
         }
 
     }
+
+    public int getEventoActual() {
+        return eventoActual;
+    }
+
+    public void setEventoActual(int eventoActual) {
+        this.eventoActual = eventoActual;
+    }
+    
 
     public double getTiempoActual() {
         return tiempoActual;
