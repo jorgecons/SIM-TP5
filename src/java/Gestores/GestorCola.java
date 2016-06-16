@@ -45,7 +45,7 @@ public class GestorCola {
         vectorEstado = new VectorEstado[2];
         vectorEstado[0] = new VectorEstado(tiempoActual);
         vectorEstado[0].lineaCero();
-        iaux = 2;
+        iaux = 1;
         cabina = new Cabina();
         listadoCabinas = new ArrayList<>();
 
@@ -61,6 +61,7 @@ public class GestorCola {
     }
 
     public void comenzarSimulacion() {
+        //INICIALIZA EN 1 PORQUE TENGO LA LINEA CERO
         int i = 1;
         System.out.println("Vuelta: " + i);
         primeraLinea();
@@ -69,8 +70,11 @@ public class GestorCola {
             System.out.println("Vuelta: " + i);
             nuevaLinea();
             i++;
-
+//            if (i > 100) {
+//                break;
+//            }
         }
+        vectorEstado[1].menorTiempo();
     }
 
     //La primera linea es la segunda mostrada, donde lo que ocurre es la llegada de un auto si o si
@@ -87,6 +91,7 @@ public class GestorCola {
         autos.add(aut);
         maximoTamAutos();
         vec.setEventoActual(vectorEstado[0].getSiguienteEvento());
+        vec.setTiempoLog(vectorEstado[0].getTiempoLog());
         vectorEstado[1] = vec;
         addAux(vec);
 
@@ -100,6 +105,7 @@ public class GestorCola {
         //Determino si llega un nuevo auto o termina una cabina
         //1 = llegada
         //2 = Fin atencion
+        //tp6 - 3= log sistema
         if (vectorEstado[1].getSiguienteEvento() == 1) {
 
             Auto aut;
@@ -121,12 +127,15 @@ public class GestorCola {
             } else {
                 autos.add(aut);
             }
-            iaux++;
-            System.out.println("Llegana nº: "+iaux);
-            if(iaux==40){
-                System.out.println("ACA OCURRIO");
-                
-            }
+
+            vec.setTiempoLog(vectorEstado[1].getTiempoLog());
+            vec.setTiempoFinLog(vectorEstado[1].getTiempoFinLog());
+//            iaux++;
+//            System.out.println("Llegana nº: "+iaux);
+//            if(iaux==40){
+//                System.out.println("ACA OCURRIO");
+//                
+//            }
         }
 
         //EVENTO 2       
@@ -200,6 +209,55 @@ public class GestorCola {
                 }
 
             }
+            vec.setTiempoLog(vectorEstado[1].getTiempoLog());
+            vec.setTiempoFinLog(vectorEstado[1].getTiempoFinLog());
+        }
+        //EVENTO 3 - SE ME CONGELA EL SISTEMA
+        if (vectorEstado[1].getSiguienteEvento() == 3) {
+            vec.generarLogSistema();
+            //mantengo el tiempo proxima llegada con su auto...
+            vec.setTiempoProximaLlegada(vectorEstado[1].getTiempoProximaLlegada());
+            vec.setAuto(vectorEstado[1].getAuto());
+            //copio los tiempo de antencion
+            vec.setTiempoFinAtencion(vectorEstado[1].getTiempoFinAtencion());
+            //si la cabina estaba ocupada, le agrego al auto 5 minutos mas-300
+            if (!cabina.estaLibre()) {
+                autos.get(0).setTiempoAtencion(autos.get(0).getTiempoAtencion() + 300);
+                //al tiempo fin atencion de la cabina, le agrego 5 min mas
+                if (!vec.getTiempoFinAtencion().isEmpty()) {
+                    vec.getTiempoFinAtencion().set(0, vec.getTiempoFinAtencion().get(0) + 300);
+
+                } else {
+                    vec.getTiempoFinAtencion().add(vec.getTiempoFinAtencion().get(0) + 300);
+                }
+            }
+            //bloqueo la cabina
+            cabina.bloquear();
+            vec.setTiempoFinLog(tiempoActual + 300);
+
+        }
+        //EVENTO 4 - SE ME DESCONGELA EL SISTEMA
+        if (vectorEstado[1].getSiguienteEvento() == 4) {
+            vec.setTiempoLog(vectorEstado[1].getTiempoLog());
+            //mantengo el tiempo proxima llegada con su auto...
+            vec.setTiempoProximaLlegada(vectorEstado[1].getTiempoProximaLlegada());
+            vec.setAuto(vectorEstado[1].getAuto());
+            //copio los tiempo de antencion
+            vec.setTiempoFinAtencion(vectorEstado[1].getTiempoFinAtencion());
+
+            //desbloqueo la cabina
+            //me fijo si tiene autos en la cola
+            //tambien si ya tengo un tiempo fin antencion
+            if (vec.getTiempoFinAtencion().isEmpty()) {
+                if (!cabina.getColaAutos().isEmpty()) {
+                    Auto aut = liberarCabina(-1);
+                    asignarACabina(aut, vec, -1);
+                } else {
+                    cabina.liberar();
+                }
+            }else{
+                cabina.ocupar();
+            }
 
         }
 //        if (vec.getTiempoFinAtencion().size() == 2 && iaux == 0) {
@@ -209,6 +267,7 @@ public class GestorCola {
 //            iaux++;
 //        }
         vec.setEventoActual(vectorEstado[1].getSiguienteEvento());
+
         //calculo el tamaño maximo de autos en el sistema 
         maximoTamAutos();
         //añado el vector en el de simulacion y en el de mostrar

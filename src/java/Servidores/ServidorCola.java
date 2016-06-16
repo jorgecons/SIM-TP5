@@ -43,7 +43,7 @@ public class ServidorCola extends HttpServlet {
         gc.comenzarSimulacion();
         ArrayList<VectorAux> mostrar= gc.getVectorEstadoaux();
         //LO MUESTRO POR CONSOLA, PARA CORROBORAR MEJOR
-        int numeroLinea=0;
+        
         int maximoTam= gc.getMaximaCantidadAutos();
         int montoTotal=gc.getMontoToal();
         int numeroCabinas= gc.getNumeroMaxCabina();

@@ -21,9 +21,16 @@ public class VectorEstado {
     private double tiempoEntreLlegada, tiempoDemoraAtencion;
     private double rndLlegadaAuto, rndCatAuto, rndAtencion;
     private int siguienteEvento;//para saber que evento es el que sigue; 1- llegada, 2- fin atencion;
+    //para el tp6, agrego el evento 2- log Sistema;
     private int eventoActual;
     private Auto auto;
     private int numeroCabina;
+    //para el tp6
+    private double rndLog;
+    private int porcentajeLlenado;
+    private double tiempoHastaLog;
+    private double tiempoLog;
+    private double tiempoFinLog;
 
     public VectorEstado(double tiempoActual) {
         this.tiempoActual = tiempoActual;
@@ -34,8 +41,65 @@ public class VectorEstado {
     public void lineaCero() {
         this.tiempoActual = 0d;
         nuevaLlegadaAuto();
+        generarLogSistema();
         siguienteEvento = 1;
-        eventoActual=0;
+        eventoActual = 0;
+    }
+
+    public void generarLogSistema() {
+        this.rndLog = Math.random();
+        if (rndLog < 0.50d) {
+            this.porcentajeLlenado = 100;
+            this.tiempoHastaLog = 4501d;
+        } else if (rndLog < 0.80d) {
+            this.porcentajeLlenado = 80;
+            this.tiempoHastaLog = 4166d;
+        } else {
+            this.porcentajeLlenado = 50;
+            this.tiempoHastaLog = 3459.5d;
+        }
+        this.tiempoLog = tiempoActual + tiempoHastaLog;
+
+    }
+
+    public double getTiempoHastaLog() {
+        return tiempoHastaLog;
+    }
+
+    public void setTiempoHastaLog(double tiempoHastaLog) {
+        this.tiempoHastaLog = tiempoHastaLog;
+    }
+
+    public double getTiempoFinLog() {
+        return tiempoFinLog;
+    }
+
+    public void setTiempoFinLog(double tiempoFinLog) {
+        this.tiempoFinLog = tiempoFinLog;
+    }
+
+    public double getTiempoLog() {
+        return tiempoLog;
+    }
+
+    public void setTiempoLog(double tiempoLog) {
+        this.tiempoLog = tiempoLog;
+    }
+
+    public double getRndLog() {
+        return rndLog;
+    }
+
+    public void setRndLog(double rndLog) {
+        this.rndLog = rndLog;
+    }
+
+    public int getPorcentajeLlenado() {
+        return porcentajeLlenado;
+    }
+
+    public void setPorcentajeLlenado(int porcentajeLlenado) {
+        this.porcentajeLlenado = porcentajeLlenado;
     }
 
     public void setTiempoActual(double tiempoActual) {
@@ -81,7 +145,6 @@ public class VectorEstado {
     public void setEventoActual(int eventoActual) {
         this.eventoActual = eventoActual;
     }
-    
 
     public double getTiempoActual() {
         return tiempoActual;
@@ -130,9 +193,9 @@ public class VectorEstado {
     public void generarTiempoAtencion(Auto auto, int i) {
         rndAtencion = Math.random();
         auto.atender();
-        
+
         auto.tiempoAtencion(rndAtencion);
-        
+
         tiempoDemoraAtencion = auto.getTiempoAtencion();
         if (tiempoFinAtencion.isEmpty()) {
             tiempoFinAtencion.add(tiempoActual + tiempoDemoraAtencion);
@@ -151,26 +214,102 @@ public class VectorEstado {
     }
 
     public double menorTiempo() {
-        if (tiempoProximaLlegada != 0) {
+        if (tiempoFinLog != 0) {
             if (!tiempoFinAtencion.isEmpty()) {
                 double menorT = menorTiempoAtencion();
-                if (tiempoProximaLlegada < menorT) {
+                if (tiempoProximaLlegada < tiempoLog && tiempoProximaLlegada < tiempoFinLog && tiempoProximaLlegada < menorT) {
                     siguienteEvento = 1;
-
                     return tiempoProximaLlegada;
-                } else {
+                } else if (menorT < tiempoProximaLlegada && menorT < tiempoLog && menorT < tiempoFinLog) {
                     siguienteEvento = 2;
-
                     return menorT;
+                } else if (tiempoLog < tiempoProximaLlegada && tiempoLog < tiempoFinLog && tiempoLog < menorT) {
+                    siguienteEvento = 3;
+                    return tiempoLog;
+                } else if (tiempoFinLog < tiempoProximaLlegada && tiempoFinLog < tiempoLog && tiempoFinLog < menorT) {
+                    siguienteEvento = 4;
+                    return tiempoFinLog;
                 }
             } else {
-                siguienteEvento = 1;
+                if (tiempoProximaLlegada < tiempoLog && tiempoProximaLlegada < tiempoFinLog) {
+                    siguienteEvento = 1;
+                    return tiempoProximaLlegada;
+                } else if (tiempoLog < tiempoProximaLlegada && tiempoLog < tiempoFinLog) {
+                    siguienteEvento = 3;
+                    return tiempoLog;
+                } else if (tiempoFinLog < tiempoProximaLlegada && tiempoFinLog < tiempoLog) {
+                    siguienteEvento = 4;
+                    return tiempoFinLog;
+                }
+            }
+        } else {
+            if (!tiempoFinAtencion.isEmpty()) {
+                double menorT = menorTiempoAtencion();
+                if (tiempoProximaLlegada < tiempoLog && tiempoProximaLlegada < menorT) {
+                    siguienteEvento = 1;
+                    return tiempoProximaLlegada;
+                } else if (menorT < tiempoProximaLlegada && menorT < tiempoLog) {
+                    siguienteEvento = 2;
+                    return menorT;
+                } else if (tiempoLog < tiempoProximaLlegada && tiempoLog < menorT) {
+                    siguienteEvento = 3;
+                    return tiempoLog;
+                }
+            } else {
+                if (tiempoProximaLlegada < tiempoLog) {
+                    siguienteEvento = 1;
+                    return tiempoProximaLlegada;
+                } else if (tiempoLog < tiempoProximaLlegada) {
+                    siguienteEvento = 3;
+                    return tiempoLog;
 
-                return tiempoProximaLlegada;
+                }
             }
         }
         return 0;
+
     }
+    //        if (tiempoProximaLlegada != 0) {
+    //            if (!tiempoFinAtencion.isEmpty()) {
+    //                double menorT = menorTiempoAtencion();
+    //                if (tiempoProximaLlegada < menorT) {
+    //                    //veo que tiempo es menor, si el que se clava o proxima llegada
+    //                    if (tiempoProximaLlegada < tiempoLog) {
+    //                        siguienteEvento = 1;
+    //
+    //                        return tiempoProximaLlegada;
+    //
+    //                    } else {//se me clava el sistema...
+    //                        siguienteEvento = 3;
+    //
+    //                        return tiempoLog;
+    //
+    //                    }
+    //                } else if (menorT < tiempoLog) {
+    //                    siguienteEvento = 2;
+    //
+    //                    return menorT;
+    //                }else{//se me clava el sistema...
+    //                    siguienteEvento = 3;
+    //
+    //                    return tiempoLog;
+    //                }
+    //            } else {
+    //                //veo que tiempo es menor, si el que se clava o proxima llegada
+    //                if (tiempoProximaLlegada < tiempoLog) {
+    //                    
+    //                    siguienteEvento = 1;
+    //
+    //                    return tiempoProximaLlegada;
+    //
+    //                } else {//se me clava el sistema...
+    //                    siguienteEvento = 3;
+    //
+    //                    return tiempoLog;
+    //
+    //                }
+    //            }
+    //        }
 
     public double menorTiempoAtencion() {
         double menorT = 0d;

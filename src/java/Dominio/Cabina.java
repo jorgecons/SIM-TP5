@@ -29,6 +29,9 @@ public class Cabina {
         return sizeCola;
     }
 
+    public void bloquear(){
+        this.estado="BLOQUEADO";
+    }
     public void setSizeCola(int sizeCola) {
         this.sizeCola = sizeCola;
     }
