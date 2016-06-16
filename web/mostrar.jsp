@@ -14,7 +14,7 @@
         <title>Resultado</title>
     </head>
     <body>
-    <center><h1 >TP5 - Simulación de Colas</h1></center>
+    <center><h1 >TP6 - Simulación de Colas - Euler</h1></center>
 
     <h3>El monto total recaudado en ${tiempo} segundos, es de $${monto}.</h3>
     <h3>Se habilitaron un total de ${cabinas} cabinas.</h3>
@@ -129,24 +129,28 @@
         <c:forEach items="${p.tiempos}" var="t" varStatus="loop">
 
             <c:set var="tiempoFin" scope="session" value="${loop.index+1}"/>
+            <c:if test="${t==0}">
+                <td style="background-color: yellow">Vacio</td>
+            </c:if>
+            <c:if test="${t!=0}">
 
 
-            <c:if test="${p.vec.numeroCabina==loop.index}">
-                <c:if test="${p.vec.siguienteEvento==2}">
-                    <td style="background-color: chartreuse"> 
-                        <fmt:formatNumber value="${t}" maxFractionDigits="3"></fmt:formatNumber>
-                        </td>
+                <c:if test="${p.vec.numeroCabina==loop.index}">
+                    <c:if test="${p.vec.siguienteEvento==2}">
+                        <td style="background-color: chartreuse"> 
+                            <fmt:formatNumber value="${t}" maxFractionDigits="3"></fmt:formatNumber>
+                            </td>
+                    </c:if>
+                    <c:if test="${p.vec.siguienteEvento!=2}">
+                        <td> 
+                            <fmt:formatNumber value="${t}" maxFractionDigits="3"></fmt:formatNumber>
+                            </td>
+                    </c:if>
                 </c:if>
-                <c:if test="${p.vec.siguienteEvento!=2}">
-                    <td> 
-                        <fmt:formatNumber value="${t}" maxFractionDigits="3"></fmt:formatNumber>
-                        </td>
+                <c:if test="${p.vec.numeroCabina!=loop.index}">
+                    <td><fmt:formatNumber value="${t}" maxFractionDigits="3"></fmt:formatNumber></td>
                 </c:if>
             </c:if>
-            <c:if test="${p.vec.numeroCabina!=loop.index}">
-                <td><fmt:formatNumber value="${t}" maxFractionDigits="3"></fmt:formatNumber></td>
-            </c:if>
-
 
         </c:forEach>
         <%--COMPLETO CON LO QUE FALTA los tiempos fin de Atencion --%>

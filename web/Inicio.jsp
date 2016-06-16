@@ -9,10 +9,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>TP5 - Simulacion</title>
+        <title>TP6 - Simulacion</title>
     </head>
     <body>
-    <center><h1>TP5 - Simulación</h1></center>
+    <center><h1>TP6 - Simulación</h1></center>
         
         <h3>Ejercicio 51</h3>
         <p>A un peaje llegan vehículos respetando una distribución exponencial negativa con media = 2’ y desviación estándar 1’,  

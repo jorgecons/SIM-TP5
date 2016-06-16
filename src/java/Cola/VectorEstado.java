@@ -197,11 +197,14 @@ public class VectorEstado {
         auto.tiempoAtencion(rndAtencion);
 
         tiempoDemoraAtencion = auto.getTiempoAtencion();
-        if (tiempoFinAtencion.isEmpty()) {
-            tiempoFinAtencion.add(tiempoActual + tiempoDemoraAtencion);
-            return;
-        }
+//        if (tiempoFinAtencion.isEmpty()) {
+//            tiempoFinAtencion.add(tiempoActual + tiempoDemoraAtencion);
+//            return;
+//        }
         if (i >= tiempoFinAtencion.size()) {
+            for (int j = tiempoFinAtencion.size(); j < i; j++) {
+                tiempoFinAtencion.add(0d);
+            }
             tiempoFinAtencion.add(tiempoActual + tiempoDemoraAtencion);
 
         } else {
@@ -313,8 +316,8 @@ public class VectorEstado {
 
     public double menorTiempoAtencion() {
         double menorT = 0d;
-        menorT = 500000d;
-        numeroCabina = 0;
+        menorT = Double.MAX_VALUE;
+        numeroCabina = -1;
         for (int i = 0; i < tiempoFinAtencion.size(); i++) {
             if (menorT > tiempoFinAtencion.get(i) && tiempoFinAtencion.get(i) != 0) {
                 menorT = tiempoFinAtencion.get(i);

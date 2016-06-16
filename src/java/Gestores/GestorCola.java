@@ -249,14 +249,25 @@ public class GestorCola {
             //me fijo si tiene autos en la cola
             //tambien si ya tengo un tiempo fin antencion
             if (vec.getTiempoFinAtencion().isEmpty()) {
+
                 if (!cabina.getColaAutos().isEmpty()) {
                     Auto aut = liberarCabina(-1);
                     asignarACabina(aut, vec, -1);
                 } else {
                     cabina.liberar();
                 }
-            }else{
-                cabina.ocupar();
+
+            } else {
+                if (vec.getTiempoFinAtencion().get(0) != 0) {
+                    cabina.ocupar();
+                } else {
+                    if (!cabina.getColaAutos().isEmpty()) {
+                        Auto aut = liberarCabina(-1);
+                        asignarACabina(aut, vec, -1);
+                    } else {
+                        cabina.liberar();
+                    }
+                }
             }
 
         }
